@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="css/tracker.css">
+
+<!-- icon library -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- favicon.ico -->
+<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+<!-- Vue.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<title>COVID-19 Tracker</title>
+</head>
+<body>
+	<!-- Navbar Start -->
+	<nav class="navbar navbar-light bg-light">
+		<a class="navbar-brand">Coronavirus (COVID-19) Tracker</a>
+		<!-- <button class="btn btn-outline-dark my-2 my-sm-0" type="button"
+		 onclick="location.href = 'https://twitter.com/d_kunal96'">
+			Feedb<img alt="at-rating" src="images/at.svg">ck
+		</button> -->
+		<a
+			href="https://twitter.com/intent/tweet?screen_name=d_kunal96&ref_src=twsrc%5Etfw"
+			class="twitter-mention-button" data-size="large"
+			data-text="#KdCovid19Trackr" data-show-count="false">Tweet to
+			@d_kunal96</a>
+		<script async src="https://platform.twitter.com/widgets.js"
+			charset="utf-8"></script
+	</nav>
+	<!-- Navbar End -->
+
+	<!-- Main content start -->
+	<main role="main" id="app">
+		<!-- Search box start -->
+		<div class="input-group mb-3 search-box">
+			<input type="text" class="form-control" id="countryname"
+				placeholder="Type country to get statistics"
+				aria-label="Recipient's username" aria-describedby="button-addon2"
+				list="countryList" @keypress="checkForInputBlank"
+				@keyup="checkForInputBlank" @click="checkForInputBlank">
+			<div class="input-group-append">
+				<button class="btn btn-outline-secondary" type="button"
+					id="button-addon2" @click="loadSpecificStats">
+					<img alt="search-country" src="images/search.svg">
+				</button>
+			</div>
+			<div v-if="showCountries">
+				<datalist id="countryList">
+					<option v-for="country in countries">{{ country.Country }}
+						({{ country.ISO2 }})</option>
+				</datalist>
+			</div>
+		</div>
+		<!-- Search box end -->
+		<!-- Statistics by country or world start -->
+		<div class="container stats" id="countrydata">
+			<div class="row spinpos" id="loadingdata">
+				<div class="spinner-border text-secondary" role="status">
+					<span class="sr-only">Loading...</span>
+				</div>
+			</div>
+			<div class="row" id="statsdata" style="visibility: hidden;">
+				<!-- Column 1 -->
+				<div class="col">
+					<div class="row entitydisplay" id="entityname">{{ country }}</div>
+					<div class="row" id="entitydesc"></div>
+					<div class="row entitydata">
+						<div class="col">
+							<div class="card">
+								<div class="card-body datacardtext">
+									<h5 class="card-title">Confirmed</h5>
+									<p class="card-text" id="confcases">#{{ confirmed }}</p>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card">
+								<div class="card-body datacardtext">
+									<h5 class="card-title">Active</h5>
+									<p class="card-text" id="actcases">#{{ active }}</p>
+								</div>
+							</div>
+						</div>
+						<div class="w-100 cardpartition"></div>
+						<div class="col">
+							<div class="card">
+								<div class="card-body datacardtext">
+									<h5 class="card-title">Recovered</h5>
+									<p class="card-text" id="reccases">#{{ recovered }}</p>
+								</div>
+							</div>
+						</div>
+						<div class="col">
+							<div class="card">
+								<div class="card-body datacardtext">
+									<h5 class="card-title">Deaths</h5>
+									<p class="card-text" id="lostcases">#{{ deaths }}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Column 2 -->
+				<div class="col" id="statsotherdata">
+					<!-- Pie chart -->
+					<!-- <canvas id="covidchart"></canvas> -->
+					<div class="row" id="renderchart"></div>
+					<div class="w-100 cardpartition"></div>
+					<div class="row">
+						<span class="detail-cards" v-if="toggleCards"
+							v-html="showOtherDetail"></span> <span class="detail-cards"
+							v-else>
+							<div class="card">
+								<div class="card-body">
+									<h6 class="card-title">{{ safeCountriesCount }} countries
+										are Coronavirus (COVID-19) safe.</h6>
+									<p class="card-text overflow-auto safe-country-name"
+										v-html="showOtherDetail"></p>
+								</div>
+							</div>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Statistics by country or world end -->
+	</main>
+	<!-- Main content end -->
+
+	<!-- <footer class="text-muted">
+		<div class="container">
+			<p class="float-right">
+				<a target="_blank" href="https://icons8.com/icons/set/rfid-signal">RFID
+					Signal icon</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+			</p>
+		</div>
+	</footer> -->
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+	<script
+		src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
+	<!-- Charts.js CDN -->
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<!-- Custom javascripts -->
+	<script type="text/javascript" src="js/loadData.js"></script>
+	<!-- Resources -->
+	<!-- <a target="_blank" href="https://icons8.com/icons/set/rfid-signal">RFID
+		Signal icon</a> icon by
+	<a target="_blank" href="https://icons8.com">Icons8</a> -->
+</body>
+</html>
