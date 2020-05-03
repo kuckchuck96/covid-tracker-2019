@@ -6,14 +6,8 @@
 	margin: 0px auto;
 }
 
-/* .rating-icon {
-	margin-bottom: 4px;
-} */
 .stats {
-	padding-top: 50px;
-	/* padding-left: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px; */
+	padding-top: 30px;
 	margin: 0px auto;
 }
 
@@ -45,7 +39,7 @@
 }
 
 .detail-cards {
-	padding-left: 40px;
+	margin: 0px auto;
 }
 
 .safe-country-name {
@@ -53,12 +47,21 @@
 	text-align: left;
 }
 
-/* .app-footer {
-	margin-top: 20px;
-	bottom: 0;
-	left: 0;
-} */
-
 .error-fetch {
-	background-color: #A6ACAF;
+	background-color: #E5E7E9;
+	border-radius: 20px;
+}
+
+.error-text {
+	margin: 0px auto;
+}
+
+footer {
+	background-color: #FDFEFE;
+	position: absolute;
+	left: 0;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    overflow: hidden;
 }

@@ -137,9 +137,17 @@ var search = new Vue(
 						// Draw chart.
 						casesData = [this.active, this.recovered, this.deaths];
 						this.drawDoughnutChart(casesData, data.Country);
-						percentCasesPerCountry = (Number(data.Confirmed) / this.worldcases) * 100;
+						percentCasesPerCountry = ((Number(data.Confirmed) / this.worldcases) * 100).toFixed(2);
+						// console.log(percentCasesPerCountry.toFixed(2) == 0);
 						this.toggleCards = true;
-						this.showOtherDetail = `<b>${data.Country}</b>&nbsp;is having approximately&nbsp;<b>${percentCasesPerCountry.toFixed(1)}%</b>&nbsp;of Coronavirus (COVID-19) cases in the world.`;
+						// this.showOtherDetail = `<b>${data.Country}</b>&nbsp;is having &nbsp;<b>${percentCasesPerCountry.toFixed(2)}%</b>&nbsp;of Coronavirus (COVID-19) cases in the world.`;
+						this.showOtherDetail = "<b>" + data.Country + "</b>&nbsp";
+						if (percentCasesPerCountry == 0) {
+							this.showOtherDetail += "is having <b><1%</b>&nbsp;";
+						} else {
+							this.showOtherDetail += "is having approximately&nbsp;<b>" + percentCasesPerCountry + "%</b>&nbsp";
+						}
+						this.showOtherDetail += "of Coronavirus (COVID-19) cases in the world.";
 					})
 					.catch((err) => {
 						// alert("Error while fetching country stats :-S", err);
