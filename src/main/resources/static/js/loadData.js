@@ -12,7 +12,9 @@ var search = new Vue(
 				deaths: 0,
 				showOtherDetail: "",
 				toggleCards: false,
-				safeCountriesCount: 0
+				safeCountriesCount: 0,
+				showLoader: true,
+				showStatsAfterLoad: false
 			},
 			methods : {
 				getCountries : function() {
@@ -57,52 +59,28 @@ var search = new Vue(
 					});
 				},
 				loadWorldStats: function() {
-					/*fetch("/api/forworld", {
+					var data = null;
+					
+					// Fetch world summary.
+					fetch("/api/forworld", {
 						method: "GET"
 					})
 					.then((response) => {
-						document.querySelector("#loadingdata").style.visibility = "hidden";
-						document.querySelector("#statsdata").style.visibility = "visible";
 						return response.json();
 					})
-					.then((data) => {
-						var casesData = undefined;
-						var date  = new Date();
-						var today = date.getDate() - 1;
-						var month = date.getMonth() + 1;
-						var year = date.getFullYear();
-						var yesterday = today + "/" + (month < 10 ? `0${month}` : month) + "/" + year;
-						this.country = "World";
-						this.confirmed = data.TotalConfirmed;
-						this.active = Number(data.TotalConfirmed) - (Number(data.TotalRecovered) + Number(data.TotalDeaths));
-						this.recovered = data.TotalRecovered;
-						this.deaths = data.TotalDeaths;
-						document.querySelector("#entitydesc").innerText = `Coronavirus (COVID-19) cases in World as of ${yesterday}.`;
-						// For global value.
-						this.worldcases = Number(data.TotalConfirmed);
-						// Draw chart.
-						casesData = [this.active, this.recovered, this.deaths];
-						this.drawDoughnutChart(casesData, "total");
-						this.toggleCards = false;
-						this.showOtherDetail = "";
+					.then((val) => {
+						data = val;
+						// Another fetch.
+						return fetch("/api/unaffected",  {
+							method: "GET"
+						});
 					})
-					.catch((err) => {
-						alert("Error while fetching world stats :-S", err);
-					});*/
-					
-					// Promise solution.
-					Promise.all([
-						fetch("/api/forworld").then(response => response.json()),
-						fetch("/api/unaffected").then(response => response.json())
-					])
-					.then(res => {
-						document.querySelector("#loadingdata").style.visibility = "hidden";
-						document.querySelector("#statsdata").style.visibility = "visible";
-						
-						var data = res[0];
-						var unaffectedCountries = res[1];
-						var cArr = [];
-						// For rendering world summary
+					.then(response => {
+						this.showLoader = false;
+						this.showStatsAfterLoad = true;
+						return response.json();
+					})
+					.then(unaffectedCountries => {
 						var casesData = undefined;
 						var date  = new Date();
 						var today = date.getDate();
@@ -121,17 +99,21 @@ var search = new Vue(
 						casesData = [this.active, this.recovered, this.deaths];
 						this.drawDoughnutChart(casesData, "total");
 						this.toggleCards = false;
+						this.showOtherDetail = "";
+						// Safe countries.
+						var cArr = [];
+						this.toggleCards = false;
 						// Show unaffected countries.
 						unaffectedCountries.forEach(c => {
-							// cArr.push(c.Country);
 							cArr.push(`<span class="badge badge-secondary">${c.Country}</span>`);
 						});
 						this.safeCountriesCount = cArr.length;
 						this.showOtherDetail = cArr.join(" ");
 					})
-					.catch(err => {
-						alert("Error while fetching world stats :-S", err);
-					});
+					.catch((err) => {
+						// alert("Error while fetching world stats :-S", err);
+						this.showLoader = this.showStatsAfterLoad = false;
+					});	
 				},
 				loadCountryStats: function(slug) {
 					// Get statistics by country.
@@ -139,8 +121,8 @@ var search = new Vue(
 						method: "GET"
 					})
 					.then((response) => {
-						document.querySelector("#loadingdata").style.visibility = "hidden";
-						document.querySelector("#statsdata").style.visibility = "visible";
+						this.showLoader = false;
+						this.showStatsAfterLoad = true;
 						return response.json();
 					})
 					.then((data) => {
@@ -160,13 +142,15 @@ var search = new Vue(
 						this.showOtherDetail = `<b>${data.Country}</b>&nbsp;is having approximately&nbsp;<b>${percentCasesPerCountry.toFixed(1)}%</b>&nbsp;of Coronavirus (COVID-19) cases in the world.`;
 					})
 					.catch((err) => {
-						alert("Error while fetching country stats :-S", err);
+						// alert("Error while fetching country stats :-S", err);
+						this.showLoader = this.showStatsAfterLoad = false;
 					});
 				},
 				loadSpecificStats : function() {
 					// Set loaders and data divisions to original state.
-					document.querySelector("#loadingdata").style.visibility = "visible";
-					document.querySelector("#statsdata").style.visibility = "hidden";
+					this.showLoader = true;
+					this.showStatsAfterLoad = false;
+					
 					var name = document.querySelector("#countryname").value.trim();
 					if (name === "" || name.toLowerCase() === "world") {
 						this.loadWorldStats();

@@ -31,18 +31,11 @@
 <body>
 	<!-- Navbar Start -->
 	<nav class="navbar navbar-light bg-light">
-		<a class="navbar-brand">Coronavirus (COVID-19) Tracker</a>
-		<!-- <button class="btn btn-outline-dark my-2 my-sm-0" type="button"
-		 onclick="location.href = 'https://twitter.com/d_kunal96'">
-			Feedb<img alt="at-rating" src="images/at.svg">ck
-		</button> -->
-		<a
+		<a class="navbar-brand">Coronavirus (COVID-19) Tracker</a> <a
 			href="https://twitter.com/intent/tweet?screen_name=d_kunal96&ref_src=twsrc%5Etfw"
 			class="twitter-mention-button" data-size="large"
 			data-text="#KdCovid19Trackr" data-show-count="false">Tweet to
 			@d_kunal96</a>
-		<script async src="https://platform.twitter.com/widgets.js"
-			charset="utf-8"></script
 	</nav>
 	<!-- Navbar End -->
 
@@ -71,12 +64,13 @@
 		<!-- Search box end -->
 		<!-- Statistics by country or world start -->
 		<div class="container stats" id="countrydata">
-			<div class="row spinpos" id="loadingdata">
+			<div class="row spinpos" id="loadingdata" v-if="showLoader">
 				<div class="spinner-border text-secondary" role="status">
 					<span class="sr-only">Loading...</span>
 				</div>
 			</div>
-			<div class="row" id="statsdata" style="visibility: hidden;">
+			<!-- <div class="row" id="statsdata" style="visibility: hidden;"> -->
+			<div class="row" id="statsdata" v-else-if="showStatsAfterLoad">
 				<!-- Column 1 -->
 				<div class="col">
 					<div class="row entitydisplay" id="entityname">{{ country }}</div>
@@ -139,6 +133,8 @@
 					</div>
 				</div>
 			</div>
+			<!-- For showing error if statistics failed to load. -->
+			<div class="row error-fetch" id="erroratload" v-else>Error!</div>
 		</div>
 		<!-- Statistics by country or world end -->
 	</main>
@@ -168,6 +164,9 @@
 		crossorigin="anonymous"></script>
 	<!-- Charts.js CDN -->
 	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<!-- Twitter tweet CDN -->
+	<script async src="https://platform.twitter.com/widgets.js"
+		charset="utf-8"></script>
 	<!-- Custom javascripts -->
 	<script type="text/javascript" src="js/loadData.js"></script>
 	<!-- Resources -->
