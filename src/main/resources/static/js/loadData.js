@@ -129,6 +129,11 @@ var search = new Vue(
 						var percentCasesPerCountry = null;
 						var casesData = null;
 						this.country = data.Country;
+						
+						if (this.country == "") {
+							throw 0;
+						}
+						
 						this.confirmed = data.Confirmed;
 						this.active = Number(data.Confirmed) - (Number(data.Recovered) + Number(data.Deaths));
 						this.recovered = data.Recovered;
@@ -150,7 +155,9 @@ var search = new Vue(
 						this.showOtherDetail += "of Coronavirus (COVID-19) cases in the world.";
 					})
 					.catch((err) => {
-						// alert("Error while fetching country stats :-S", err);
+						if (err == false) {
+							alert("Sorry :( data for this country isn't available.");
+						} 
 						this.showLoader = this.showStatsAfterLoad = false;
 					});
 				},
