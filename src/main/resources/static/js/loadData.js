@@ -171,7 +171,7 @@ var search = new Vue(
 						this.loadWorldStats();
 					} else {
 						var slug = this.countries.filter(c => {
-							return c.Country == name.split("(")[0].trim();
+							return c.Country == name.trim();
 						}).pop().Slug;
 						this.loadCountryStats(slug);
 					}
