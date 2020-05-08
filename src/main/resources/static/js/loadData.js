@@ -177,10 +177,20 @@ var search = new Vue(
 					}
 					// Set search text as blank.
 					document.querySelector("#countryname").value = "";
+				},
+				detectMobileBrowser : function() {
+					var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+					var githubIssueBtn = document.querySelector(".github-button");
+					if (isMobile) {
+						githubIssueBtn.setAttribute("data-show-count", "false");
+					} else {
+						githubIssueBtn.setAttribute("data-show-count", "true");
+					}
 				}
 			},
 			created : function() {
 				this.loadWorldStats();
 				this.getCountries();
+				this.detectMobileBrowser();
 			}
 		});
