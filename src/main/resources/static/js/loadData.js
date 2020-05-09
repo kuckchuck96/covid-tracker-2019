@@ -170,10 +170,15 @@ var search = new Vue(
 					if (name === "" || name.toLowerCase() === "world") {
 						this.loadWorldStats();
 					} else {
-						var slug = this.countries.filter(c => {
-							return c.Country == name.trim();
-						}).pop().Slug;
-						this.loadCountryStats(slug);
+						try {
+							var slug = this.countries.filter(c => {
+								return c.Country == name.trim();
+							}).pop().Slug;
+							this.loadCountryStats(slug);
+						} catch (e) {
+							alert("Please search and select valid country."); 
+							this.loadWorldStats();
+						}
 					}
 					// Set search text as blank.
 					document.querySelector("#countryname").value = "";
