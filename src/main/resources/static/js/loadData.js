@@ -104,11 +104,16 @@ var search = new Vue(
 						var cArr = [];
 						this.toggleCards = false;
 						// Show unaffected countries.
-						unaffectedCountries.forEach(c => {
-							cArr.push(`<span class="badge badge-secondary">${c.Country}</span>`);
-						});
-						this.safeCountriesCount = cArr.length;
-						this.showOtherDetail = cArr.join(" ");
+						if (unaffectedCountries.length < 1) {
+							this.safeCountriesCount = "No";
+							document.querySelector("#safeCountryName").remove();
+						} else {
+							unaffectedCountries.forEach(c => {
+								cArr.push(`<span class="badge badge-secondary">${c.Country}</span>`);
+							});
+							this.safeCountriesCount = cArr.length;
+							this.showOtherDetail = cArr.join(" ");
+						}
 					})
 					.catch((err) => {
 						// alert("Error while fetching world stats :-S", err);
