@@ -70,3 +70,7 @@ footer {
 .extra-space {
 	height: 50px;
 }
+
+.center-other-cards {
+	margin: 0px auto;
+}

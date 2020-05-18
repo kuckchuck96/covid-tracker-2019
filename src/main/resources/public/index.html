@@ -20,8 +20,16 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <!-- favicon.ico -->
-<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<!-- <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="images/favicon.ico" type="image/x-icon"> -->
+
+<link rel="apple-touch-icon" sizes="76x76" href="images/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#ffffff">
 
 <!-- Vue.js CDN -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
@@ -32,7 +40,12 @@
 <body>
 	<!-- Navbar Start -->
 	<nav class="navbar navbar-light bg-light">
-		<a class="navbar-brand">Coronavirus (COVID-19) Tracker</a> 
+		<!-- <a class="navbar-brand">Coronavirus (COVID-19) Tracker</a>  -->
+		<a class="navbar-brand" href="#"> <img
+			src="images/egg-fried.svg" width="30"
+			height="30" class="d-inline-block align-top" alt="virus-img" loading="lazy">
+			Coronavirus (COVID-19) Tracker
+		</a>
 	</nav>
 	<!-- Navbar End -->
 
@@ -113,12 +126,12 @@
 					<div class="row" id="renderchart"></div>
 					<div class="w-100 cardpartition"></div>
 					<div class="row detail-cards">
-						<span v-if="toggleCards" v-html="showOtherDetail"></span> <span
-							v-else>
+						<span class="center-other-cards" v-if="toggleCards" v-html="showOtherDetail"></span> 
+						<span class="center-other-cards" v-else>
 							<div class="card">
 								<div class="card-body">
 									<h6 class="card-title">
-										<img alt="triangle-fill" src="images/triangle-fill.svg">&nbsp;{{
+										<img alt="triangle-fill" src="images/ex-triangle.svg">&nbsp;{{
 										safeCountriesCount }} countries are Coronavirus (COVID-19)
 										safe.
 									</h6>
